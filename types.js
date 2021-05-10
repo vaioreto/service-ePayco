@@ -43,7 +43,7 @@ module.exports = {
                     ? await query(`SELECT * FROM Clientes WHERE id = ${idCliente}`)
                     : null;
 
-                return clienteData.length > 0 ? { ...clienteData[0] } : null;
+                return (clienteData && clienteData.length > 0) ? { ...clienteData[0] } : null;
 
             } catch (error) {
                 errorHandler(error);

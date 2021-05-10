@@ -1,7 +1,7 @@
 `use stric`
 const connectMYSQL_DB = require('./lib/db/db-mysql');
 const errorHandler = require('./errorHandler');
-const { simularCargar,hashPass } = require('./utils/functions');
+const { simularCargar, hashPass } = require('./utils/functions');
 const util = require('util');
 const { MYSQL_DB_HOST_DEV } = process.env;
 
@@ -9,7 +9,50 @@ let db_mysql;
 
 module.exports = {
     
-    createCliente: async (root, { input }) => {       
+    recargarBilletera: async (root, { documento, celular, valor }) => {
+
+        try {
+
+            const defaults = {
+                updatedAt: new Date()
+            }
+
+            let cliente;
+            let billetera;
+
+            db_mysql = await connectMYSQL_DB();
+            const query = util.promisify(db_mysql.query).bind(db_mysql);
+
+            const resulCliente = await query(`SELECT Billeteras.id as idBilletera, 
+            Clientes.id as idCliente, saldo FROM Clientes 
+            INNER JOIN Billeteras ON Clientes.id = Billeteras.idCliente 
+            WHERE Clientes.documento = '${documento}' AND Clientes.celular = '${celular}'`);
+
+            if (resulCliente.length == 0) {
+                return null;
+            }
+
+            cliente = { ...resulCliente[0] };
+
+            cliente['saldo'] += valor;
+
+            await query(`UPDATE Billeteras SET saldo = ? WHERE id = ?`, [cliente['saldo'], cliente['idBilletera']]);
+
+            billetera = await query(`SELECT * FROM Billeteras WHERE id = ${cliente['idBilletera']}`);
+
+            if (MYSQL_DB_HOST_DEV && MYSQL_DB_HOST_DEV === 'localhost') {
+                await simularCargar();
+            }
+
+            return {...billetera[0]};
+
+        } catch (error) {
+            errorHandler(error);
+        }
+
+    },
+
+    createCliente: async (root, { input }) => {
 
         try {
 
@@ -19,7 +62,7 @@ module.exports = {
                 updatedAt: null,
                 deletedAt: false
             }
-    
+
             let cliente;
             const newCliente = Object.assign(input, defaults);
 
@@ -39,12 +82,11 @@ module.exports = {
                 await simularCargar();
             }
 
-            return Object.assign(newCliente, {id: cliente['insertId']});            
+            return Object.assign(newCliente, { id: cliente['insertId'] });
 
         } catch (error) {
             errorHandler(error);
         }
-
 
     }
 
