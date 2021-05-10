@@ -1,13 +1,49 @@
 'use stric'
 const connectMYSQL_DB = require('./lib/db/db-mysql');
 const errorHandler = require('./errorHandler');
-const { simularCargar } = require('./utils/functions');
+const { simularCargar, checkUserPass, encrypt } = require('./utils/functions');
 const util = require('util');
 const { MYSQL_DB_HOST_DEV } = process.env;
 
 let db_mysql;
 
 module.exports = {
+
+    login: async (root, { email, password }) => {
+
+        let cliente = {};
+        let token = {
+            cpt: '',
+            rest: ''
+        };
+
+        try {
+
+            db_mysql = await connectMYSQL_DB();
+            const query = util.promisify(db_mysql.query).bind(db_mysql);
+
+            const resultCliente = await query(`SELECT * FROM Clientes WHERE email = '${email}'`);
+
+            cliente = { ...resultCliente[0] };
+
+            if (MYSQL_DB_HOST_DEV && MYSQL_DB_HOST_DEV === 'localhost') {
+                await simularCargar();
+            }
+
+            if (!cliente) {
+                return null;
+            } else if (! await checkUserPass(password, cliente['password'])) {
+                return null;
+            }
+
+            Object.assign(token, encrypt(JSON.stringify({ email, id: cliente['id'] })));
+
+            return token;
+
+        } catch (error) {
+            errorHandler(error);
+        }
+    },
 
     getClientes: async (root, { }) => {
 

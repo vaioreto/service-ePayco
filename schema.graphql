@@ -7,9 +7,9 @@ type Cliente {
     email: String
     celular: String
     password: String
-    create_at: String
-    update_at: String
-    delete_at: Boolean
+    createdAt: String
+    updatedAt: String
+    deletedAt: Boolean
 }
 
 #Billetera de Clientes
@@ -18,9 +18,9 @@ type Billetera {
     idCliente: Int
     cliente: Cliente
     saldo: Float
-    create_at: String
-    update_at: String
-    delete_at: Boolean
+    createddAt: String
+    updateddAt: String
+    deleteddAt: Boolean
 }
 
 #Token de session

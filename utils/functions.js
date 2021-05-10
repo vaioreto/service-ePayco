@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const algorithm = 'aes-256-ctr';
-const secretKey = 'vVHS6sdmpNWjRRIjCc7rdxs51lwHzfr6';
+const secretKey = 'vVHS6sdmpNWjRRIqCc7rdxs01lwHzfr9';
 const iv = crypto.randomBytes(16);
 const saltRounds = 11;
 

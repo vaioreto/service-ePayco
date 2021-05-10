@@ -3,7 +3,7 @@ type Query {
     getClientes: [Cliente]
     "Regresa un Cliente"
     getCliente(filtro: String!): Cliente
-    "Login Clientes"
+    "Login para Clientes"
     login(email: String!, password: String!): ClienteWebToken
 
     "Retorna todas las Billeteras de los Clientes del sistema"

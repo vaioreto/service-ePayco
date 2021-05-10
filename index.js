@@ -15,6 +15,7 @@ const {
 
 
 const arrayTypeDefs = [
+  mutationsGraphql,
   typeDefs,
   querysGraphql,
 ];

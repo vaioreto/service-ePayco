@@ -1,4 +1,5 @@
-type Mutation {
-    
+type Mutation {    
+    "Crea un cliente"
+    createCliente(input: ClienteInput!): Cliente
     
 }
