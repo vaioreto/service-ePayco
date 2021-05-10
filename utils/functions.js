@@ -8,6 +8,17 @@ const saltRounds = 11;
 
 module.exports = {
 
+    verificarTokenPago:(sessionToken, sessionTokenPago) =>{
+        return (sessionToken['email'] !== sessionTokenPago['email'] || sessionToken['id'] !== sessionTokenPago['id']) ? false : true;
+    },
+
+    generateTokenPago: (num) => {
+        // const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const result1 = Math.random().toString(36).substring(0, num).replace('.', '');
+
+        return result1;
+    },
+
     simularCargar: () => {
         return new Promise(resolve => setTimeout(resolve, 3000));
     },
@@ -35,9 +46,9 @@ module.exports = {
     decrypt: (hash) => {
 
         const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.cpt, 'hex'));
-    
+
         const decrpyted = Buffer.concat([decipher.update(Buffer.from(hash.rest, 'hex')), decipher.final()]);
-    
+
         return decrpyted.toString();
     }
 
