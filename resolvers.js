@@ -7,5 +7,5 @@ const types = require('./types');
 module.exports = {    
     Query: querys,    
     //Mutation: muttations,
-    //...types
+    ...types
 }

@@ -1,7 +1,8 @@
-#Clienets del sistema
+#Clientes del sistema
 type Cliente {
-    id: ID
+    id: Int
     documento: String
+    billetera: Billetera
     nombre: String
     email: String
     celular: String
@@ -11,10 +12,29 @@ type Cliente {
     delete_at: Boolean
 }
 
+#Billetera de Clientes
+type Billetera {
+    id: Int
+    idCliente: Int
+    cliente: Cliente
+    saldo: Float
+    create_at: String
+    update_at: String
+    delete_at: Boolean
+}
+
 #Token de session
 type ClienteWebToken {
     cpt: String
     rest: String
+}
+
+input BilleteraInput {
+    idCliente: String!
+}
+
+input BilleteraEditInput {
+    saldo: Float
 }
 
 input ClienteInput {
