@@ -1,0 +1,7 @@
+`use stric`
+
+module.exports = {
+    
+    
+
+}

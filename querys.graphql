@@ -1,0 +1,8 @@
+type Query {    
+    "Regresa todos los Clientes"
+    getClientes: [Cliente]
+    "Regresa un Cliente"
+    getCliente(id: ID!): Cliente
+    "Login Clientes"
+    login(email: String!, password: String!): ClienteWebToken
+}

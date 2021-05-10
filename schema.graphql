@@ -1,0 +1,33 @@
+#Clienets del sistema
+type Cliente {
+    id: ID
+    documento: String
+    nombre: String
+    email: String
+    celular: String
+    password: String
+    create_at: String
+    update_at: String
+    delete_at: Boolean
+}
+
+#Token de session
+type ClienteWebToken {
+    cpt: String
+    rest: String
+}
+
+input ClienteInput {
+    documento: String!
+    nombre: String!
+    email: String!
+    celular: String!
+    password: String!
+}
+
+input ClienteEditInput {
+    documento: String
+    nombre: String
+    email: String
+    celular: String
+}
