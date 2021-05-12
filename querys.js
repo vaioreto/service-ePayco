@@ -133,7 +133,7 @@ module.exports = {
                 return null;
             }
 
-            Object.assign(token, encrypt(JSON.stringify({ email, id: cliente['id'],  celular: cliente['celular'], documento: cliente['documento']})));
+            Object.assign(token, encrypt(JSON.stringify({ nombre: cliente['nombre'], email, id: cliente['id'],  celular: cliente['celular'], documento: cliente['documento']})));
 
             return token;
 
