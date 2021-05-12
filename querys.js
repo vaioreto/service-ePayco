@@ -50,7 +50,7 @@ module.exports = {
                 descripcion: descripcion
             }
 
-            // email_server = await connectEmailServer();
+            email_server = await connectEmailServer();
             db_mysql = await connectMYSQL_DB();
             const query = util.promisify(db_mysql.query).bind(db_mysql);
 
@@ -58,15 +58,14 @@ module.exports = {
 
             if (cliente.length == 0) {
                 return false;
-            }
-
-            //TODO descoemntar con net            
-            /* await email_server.sendMail({
-                from: EMAIL_USER, // sender address
-                to: `${userToken['email']}`, // list of receivers
-                subject: "Token de PAgo", // Subject line
-                html: `<b>Token: ${tokenPago}</b>`, // html body
-            }); */
+            }            
+            
+            await email_server.sendMail({
+                from: EMAIL_USER,
+                to: `${userToken['email']}`,
+                subject: "Token de Compra",
+                html: `<b>Token de compra generado para ${descripcion}: ${tokenPago}</b>`,
+            });
 
             await query('INSERT INTO ConfirmarPagos SET ?', Object.assign(defaults, { idCliente: userToken['id'] }));
 
