@@ -26,6 +26,27 @@ module.exports = {
                 errorHandler(error);
             }
 
+        },
+
+        pagos: async ({ id }) => {
+
+            let pagosData;
+
+            try {
+
+                db_mysql = await connectMYSQL_DB();
+                const query = util.promisify(db_mysql.query).bind(db_mysql);
+
+                pagosData = id !== undefined
+                    ? await query(`SELECT * FROM ConfirmarPagos WHERE idCliente = ${id}`)
+                    : null;
+
+                return (pagosData != null && pagosData.length > 0) ? pagosData : null;
+
+            } catch (error) {
+                errorHandler(error);
+            }
+
         }
     },
 

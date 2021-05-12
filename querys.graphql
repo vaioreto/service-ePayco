@@ -10,5 +10,8 @@ type Query {
     consultarSaldo(documento: String!, celular: String!): Cliente
 
     "Generar token pago de compra"
-    pagar(sessionToken: ClienteWebTokenInput!, monto: Float!): Boolean
+    pagar(sessionToken: ClienteWebTokenInput!, monto: Float!, descripcion: String!): Cliente
+
+    "Verifica email o documentos"
+    verificar(consulta: String!): Boolean
 }

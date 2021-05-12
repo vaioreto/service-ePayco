@@ -9,9 +9,32 @@ const { MYSQL_DB_HOST_DEV, EMAIL_USER } = process.env;
 let db_mysql;
 let email_server;
 
-module.exports = {    
+module.exports = {
 
-    pagar: async (root, { sessionToken, monto }) => {
+    verificar: async (root, { consulta }) => {
+
+        let clientes = [];
+
+        try {
+
+            db_mysql = await connectMYSQL_DB();
+            const query = util.promisify(db_mysql.query).bind(db_mysql);
+
+            clientes = await query(`SELECT * FROM Clientes WHERE ${consulta}`);
+
+            if (MYSQL_DB_HOST_DEV && MYSQL_DB_HOST_DEV === 'localhost') {
+                await simularCargar();
+            }
+
+            return (clientes && clientes.length === 0) ? false : true;
+
+        } catch (error) {
+            errorHandler(error);
+        }
+
+    },
+
+    pagar: async (root, { sessionToken, monto, descripcion }) => {
 
         try {
 
@@ -23,7 +46,8 @@ module.exports = {
                 sessionToken: JSON.stringify(sessionToken),
                 tokenPago: tokenPago,
                 createdAt: new Date(),
-                monto: monto
+                monto: monto,
+                descripcion: descripcion
             }
 
             // email_server = await connectEmailServer();
@@ -32,7 +56,7 @@ module.exports = {
 
             cliente = await query(`SELECT * FROM Clientes WHERE email = ? AND id = ?`, [userToken['email'], userToken['id']]);
 
-            if(cliente.length == 0) {
+            if (cliente.length == 0) {
                 return false;
             }
 
@@ -44,10 +68,10 @@ module.exports = {
                 html: `<b>Token: ${tokenPago}</b>`, // html body
             }); */
 
-            await query('INSERT INTO ConfirmarPagos SET ?', Object.assign(defaults, {idCliente: userToken['id']}));
+            await query('INSERT INTO ConfirmarPagos SET ?', Object.assign(defaults, { idCliente: userToken['id'] }));
 
 
-            return true;
+            return {...cliente[0]};
 
         } catch (error) {
             errorHandler(error);
@@ -103,13 +127,13 @@ module.exports = {
                 await simularCargar();
             }
 
-            if (!cliente) {
+            if (resultCliente.length == 0) {
                 return null;
             } else if (! await checkUserPass(password, cliente['password'])) {
                 return null;
             }
 
-            Object.assign(token, encrypt(JSON.stringify({ email, id: cliente['id'] })));
+            Object.assign(token, encrypt(JSON.stringify({ email, id: cliente['id'],  celular: cliente['celular'], documento: cliente['documento']})));
 
             return token;
 

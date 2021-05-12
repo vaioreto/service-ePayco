@@ -3,6 +3,7 @@ type Cliente {
     id: Int
     documento: String
     billetera: Billetera
+    pagos: [Confirmarpagos]
     nombre: String
     email: String
     celular: String
@@ -32,6 +33,7 @@ type Confirmarpagos {
     tokenPago: String
     monto: Float
     pagado: Boolean
+    descripcion: String
     createddAt: String
     updateddAt: String
 }

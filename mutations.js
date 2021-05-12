@@ -17,6 +17,7 @@ module.exports = {
             let restBilletera = [];
             let billeteraData = [];
             let confirmarPagoData = {};
+            let cliente ={};
             const userToken = JSON.parse(decrypt(sessionToken));
 
             const defaults = {
@@ -55,12 +56,16 @@ module.exports = {
             await query(`UPDATE Billeteras SET saldo = ? WHERE idCliente = ?`, [(billeteraData['saldo'] -= confirmarPagoData['monto']), userToken['id']]);
 
             await query(`UPDATE ConfirmarPagos SET pagado = ? WHERE tokenPago = ?`, [true, tokenPago]);
+            
+            const restCliente = await query(`SELECT * FROM Clientes WHERE id = ?`, [userToken['id']]);
 
             if (MYSQL_DB_HOST_DEV && MYSQL_DB_HOST_DEV === 'localhost') {
                 await simularCargar();
             }
 
-            return true;
+            cliente = {...restCliente[0]};
+
+            return cliente;
 
         } catch (error) {
             errorHandler(error);
@@ -88,7 +93,7 @@ module.exports = {
             WHERE Clientes.documento = '${documento}' AND Clientes.celular = '${celular}'`);
 
             if (resulCliente.length == 0) {
-                return null;
+                return false;
             }
 
             cliente = { ...resulCliente[0] };
