@@ -8,4 +8,4 @@
 
 > 2- crear archivo .env para las variables de entorno, verificar las variables de entorno en los archivos db-mysql.js y email-server.js
 
-> 2- Levantar el servidor usando "npm run dev"
+> 3- Levantar el servidor usando "npm run dev"
