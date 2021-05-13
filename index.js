@@ -21,7 +21,7 @@ const arrayTypeDefs = [
 ];
 
 
-const server = new ApolloServer({// Servidor apolo
+const server = new ApolloServer({
   typeDefs: arrayTypeDefs,
   resolvers
 });
