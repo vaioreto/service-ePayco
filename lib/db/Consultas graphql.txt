@@ -53,7 +53,7 @@ query getCliente($id: Int!) {
 
 }
 
-# VARIABLES CREAR CLIENTES #
+# VARIABLES BUSCAR CLIENTE #
 
 {
   "id": numero id no string
