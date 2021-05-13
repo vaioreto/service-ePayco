@@ -1,0 +1,177 @@
+### CREAR CLIENTE ###
+
+mutation createCliente ($input: ClienteInput!) {
+
+    createCliente(input: $input){
+      id
+      email
+    }
+  
+ }
+
+# VARIABLES CREAR CLIENTES #
+
+{
+  "input": {
+	"documento": "documento",
+    "nombre": "nombre",
+    "email": "email@gmail.com",
+    "celular": "12345678",
+    "password": "prueba"
+  }
+}
+
+### LISTAR CLIENTES ###
+
+query{
+
+  getClientes{
+    id
+    documento
+    billetera{
+      saldo
+    }
+  }
+
+}
+
+### BUSCAR UN CLINETE POR EL ID ###
+
+query getCliente($id: Int!) {
+
+    getClienteById(id: $id){
+        id
+        pagos{
+            id
+            monto
+            pagado
+            descripcion
+            createddAt
+            updateddAt
+        }
+    }
+
+}
+
+# VARIABLES CREAR CLIENTES #
+
+{
+  "id": numero id no string
+}
+
+### CONSULTAR SALDO ###
+
+query consultarSaldo($documento: String!, $celular: String!){
+
+  consultarSaldo(documento: $documento, celular: $celular){
+    billetera{
+      saldo
+    }
+  }
+
+}
+
+# VARIABLES CONSULTAR SALDO #
+
+{
+  "documento": "docuemnto",
+  "celular": "celular"
+}
+
+
+### LOGIN CLIENTES ###
+
+query login($email: String!, $password: String!) {
+  
+    login(email: $email, password: $password){
+        cpt
+        rest
+    }
+  
+}
+
+# VARIABLES LOGIN #
+
+{
+  "password": "prueba",
+  "email": "email@gmail.com"
+}
+
+### PAGAR ####
+
+query pagar($sessionToken: ClienteWebTokenInput!, $monto: Float!, $descripcion: String!){
+  
+        pagar(sessionToken: $sessionToken, monto: $monto, descripcion: $descripcion){
+            id
+            pagos{
+                id
+                monto
+                pagado
+                descripcion
+                createddAt
+                updateddAt
+            }
+        }
+  
+ }
+
+# VARIABLES PAGAR #
+
+{
+  "sessionToken": {
+      "cpt": "4d9f8633d6b8202d182bd17b9d99028b",
+      "rest": "3ee48a226f71e496d00f26820d486a517d8019792a960b18e25b3723454ea86707b956d94a777d597741bbe6032b48cacef1a4dbf702f33c2da66e8e9e29d0ca465f11757b8c9e8b671e6a74a06389b86e0616ffbf5e427d34f3a6ab4307"
+  },
+
+  "monto": 300, no string
+  "descripcion": "prueba"
+}
+
+### RECARGAR BILLETERA ###
+
+mutation recargarBilletera($documento: String!, $celular: String!, $monto: Float!){
+        recargarBilletera(documento: $documento, celular: $celular, valor: $monto){
+            id
+            saldo
+        }
+ }
+
+ # VARIABLES RECARGAR BILLETERA #
+
+{
+  "documento": "prueba",
+  "celular": "12345678",
+  "monto": 100
+}
+
+### CONFIRMAR PAGO ###
+
+mutation confirmarPago($sessionToken: ClienteWebTokenInput!, $tokenPago: String!){
+  
+        confirmarPagos(sessionToken: $sessionToken, tokenPago: $tokenPago){
+            id
+            pagos{
+                id
+                monto
+                pagado
+                descripcion
+                createddAt
+                updateddAt
+            },
+            billetera{
+                id
+                saldo
+            }
+        }
+  
+ }
+
+ # VARIABLES CONFIRMAR PAGO #
+
+{
+  "sessionToken": {
+      "cpt": "4d9f8633d6b8202d182bd17b9d99028b",
+      "rest": "3ee48a226f71e496d00f26820d486a517d8019792a960b18e25b3723454ea86707b956d94a777d597741bbe6032b48cacef1a4dbf702f33c2da66e8e9e29d0ca465f11757b8c9e8b671e6a74a06389b86e0616ffbf5e427d34f3a6ab4307"
+  },
+  "tokenPago": "02xijy"
+}
