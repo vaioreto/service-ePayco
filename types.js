@@ -20,7 +20,7 @@ module.exports = {
                     ? await query(`SELECT * FROM Billeteras WHERE idCliente = ${id}`)
                     : null;
 
-                return billeteraData.length > 0 ? { ...billeteraData[0] } : null;
+                return (billeteraData && billeteraData.length > 0) ? { ...billeteraData[0] } : null;
 
             } catch (error) {
                 errorHandler(error);

@@ -4,5 +4,5 @@ type Mutation {
     "Recarga una Billetera"
     recargarBilletera(documento: String!, celular: String!, valor: Float!): Billetera
     "Confirmar un pago"
-    confirmarPagos(sessionToken: ClienteWebTokenInput!, tokenPago: String!): Cliente
+    confirmarPagos(sessionToken: ClienteWebTokenInput!, tokenPago: String!, id: Int!): Cliente
 }

@@ -9,7 +9,7 @@ let db_mysql;
 
 module.exports = {
 
-    confirmarPagos: async (root, { sessionToken, tokenPago }) => {
+    confirmarPagos: async (root, { sessionToken, tokenPago, id }) => {
 
         try {
 
@@ -27,7 +27,7 @@ module.exports = {
             db_mysql = await connectMYSQL_DB();
             const query = util.promisify(db_mysql.query).bind(db_mysql);
 
-            restConfirmarPago = await query(`SELECT * FROM ConfirmarPagos WHERE tokenPago = ?`, [tokenPago]);
+            restConfirmarPago = await query(`SELECT * FROM ConfirmarPagos WHERE tokenPago = ? AND id = ?`, [tokenPago, id]);
 
             if (restConfirmarPago.length == 0) {
                 return false;
