@@ -4,7 +4,7 @@ const connectEmailServer = require('./lib/email-server/email-server');
 const errorHandler = require('./errorHandler');
 const { simularCargar, checkUserPass, encrypt, generateTokenPago, decrypt } = require('./utils/functions');
 const util = require('util');
-const { MYSQL_DB_HOST_DEV, EMAIL_USER } = process.env;
+const { MYSQL_DB_HOST_DEV, EMAIL_USER, EMAIL_SERVICE } = process.env;
 
 let db_mysql;
 let email_server;
@@ -50,7 +50,10 @@ module.exports = {
                 descripcion: descripcion
             }
 
-            email_server = await connectEmailServer();
+            if (EMAIL_SERVICE) {
+                email_server = await connectEmailServer();
+            }
+            
             db_mysql = await connectMYSQL_DB();
             const query = util.promisify(db_mysql.query).bind(db_mysql);
 
@@ -58,19 +61,23 @@ module.exports = {
 
             if (cliente.length == 0) {
                 return false;
-            }            
-            
-            await email_server.sendMail({
-                from: EMAIL_USER,
-                to: `${userToken['email']}`,
-                subject: "Token de Compra",
-                html: `<b>Token de compra generado para ${descripcion}: ${tokenPago}</b>`,
-            });
+            }
+
+            if (EMAIL_SERVICE) {
+
+                await email_server.sendMail({
+                    from: EMAIL_USER,
+                    to: `${userToken['email']}`,
+                    subject: "Token de Compra",
+                    html: `<b>Token de compra generado para ${descripcion}: ${tokenPago}</b>`,
+                });
+
+            }
 
             await query('INSERT INTO ConfirmarPagos SET ?', Object.assign(defaults, { idCliente: userToken['id'] }));
 
 
-            return {...cliente[0]};
+            return { ...cliente[0] };
 
         } catch (error) {
             errorHandler(error);
@@ -132,7 +139,7 @@ module.exports = {
                 return null;
             }
 
-            Object.assign(token, encrypt(JSON.stringify({ nombre: cliente['nombre'], email, id: cliente['id'],  celular: cliente['celular'], documento: cliente['documento']})));
+            Object.assign(token, encrypt(JSON.stringify({ nombre: cliente['nombre'], email, id: cliente['id'], celular: cliente['celular'], documento: cliente['documento'] })));
 
             return token;
 

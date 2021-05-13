@@ -2,7 +2,7 @@
 
 >Y Apollo Server para mayor informacion visitar ===>>> https://www.apollographql.com/docs/apollo-server/
 
-> Para las pruebas con envios de email visitar https://ethereal.email/create para pruebas de envio de email
+> Para las pruebas con envios de email visitar https://ethereal.email para pruebas de envio de email
 
 > 1- instalar librerias usando npm i o yarn
 
